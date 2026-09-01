@@ -358,7 +358,7 @@ body {
 .feedback-success {
   background: rgba(74, 222, 128, 0.15);
   color: var(--green);
-  border: 1px solid var((--green-dark);
+  border: 1px solid var(--green-dark);
 }
 .feedback-fail {
   background: rgba(239, 68, 68, 0.15);
