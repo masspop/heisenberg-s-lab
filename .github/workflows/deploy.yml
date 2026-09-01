@@ -1,4 +1,3 @@
-                    
 name: Deploy to GitHub Pages
 on:
   push:
@@ -20,9 +19,11 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
-      - run: npm run icons
-      - run: GITHUB_PAGES=true npm run build
+      - run: npm install
+      - run: npm run build
+        env:
+          GITHUB_PAGES: true
+          GITHUB_REPO_NAME: heisenberg-s-lab
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
