@@ -5,8 +5,7 @@ export interface Environment {
   cssClass: string;
   description: string;
 }
-
-/** Her 10 levelde bir ortam değişir (1→10, 11→20, …) */
+/** Her 5 levelde bir ortam değişir (1→5, 6→10, …) */
 export const ENVIRONMENTS: Environment[] = [
   {
     id: 1,
@@ -14,12 +13,10 @@ export const ENVIRONMENTS: Environment[] = [
     emoji: "🌭",
     cssClass: "env-hotdog",
     description: "Los Pollos Hermanos'un yanında gizli lab",
-  },export const MAX_LEVEL = 35;
-export function getEnvironmentForLevel(level: number): Environment {
-  const index = Math.floor((level - 1) / 5) % ENVIRONMENTS.length;
-  return ENVIRONMENTS[index];
-} 
-    id: 2,name: "Bataklık",
+  },
+  {
+    id: 2,
+    name: "Bataklık",
     emoji: "🐊",
     cssClass: "env-swamp",
     description: "Tulucayır bataklığında RV lab",
@@ -60,8 +57,8 @@ export function getEnvironmentForLevel(level: number): Environment {
     description: "Jesse ve Walt'ın efsanevi RV'si",
   },
 ];
-
+export const MAX_LEVEL = 35;
 export function getEnvironmentForLevel(level: number): Environment {
-  const index = Math.floor((level - 1) / 10) % ENVIRONMENTS.length;
+  const index = Math.floor((level - 1) / 5) % ENVIRONMENTS.length;
   return ENVIRONMENTS[index];
 }
