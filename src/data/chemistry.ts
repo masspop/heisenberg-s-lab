@@ -637,7 +637,7 @@ export const WALTER_FAIL_QUOTE = "DONT BE LIKE A LITTLE GIRL";
 export const LIQUID_RECIPE_IDS = new Set([
   "h2o",
   "hcl",
-  "nh3",
+  
   "naoh",
   "h2so4",
   "hno3",
