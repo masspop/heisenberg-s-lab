@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 interface SceneProps {
   className?: string;
-}
+}m
 type SceneComponent = (props: SceneProps) => ReactElement;
 export function HotdogCartScene({ className = "" }: SceneProps) {
   return (
