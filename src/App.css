@@ -90,11 +90,63 @@ body {
 .walter-title { font-family: "Bebas Neue", sans-serif; font-size: 1rem; color: #60a5fa; }
 .walter-status { font-size: 0.65rem; color: var(--text-dim); }
 .walter-hint-word { font-family: "Bebas Neue", sans-serif; font-size: 1.4rem; color: #93c5fd; text-align: center; }
-.walter-hint-idle { font-size: 0.65rem; color: var(--text-dim); font-style: italic; }
-.biome-feedback { position: relative; z-index: 3; padding: 0 0.75rem 0.75rem; display: flex; justify-content: center; }.jesse-beaker-slot {
-    ...
-  }scene-panel {
-  background: var(--bg-panel);
+.walter-hint-idle { font-size: 0.65rem; color: var(--text-dim); font-style: italic; }.biome-feedback {
+  position: relative;
+  z-index: 3;
+  padding: 0 0.75rem 0.75rem;
+  display: flex;
+  justify-content: center;
+}
+.biome-feedback .feedback {
+  width: 100%;
+  max-width: 360px;
+}
+.life-restore-overlay {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+  pointer-events: none;
+  animation: levelUpAnim 2.5s ease forwards;
+}
+.life-restore-text {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 2rem;
+  color: #f87171;
+  text-shadow: 0 0 30px rgba(248, 113, 113, 0.7);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .biome-characters {
+    flex-direction: column;
+    align-items: stretch;
+    min-height: auto;
+  }
+  .jesse-in-biome,
+  .walter-in-biome {
+    max-width: 100%;
+  }
+  .walter-in-biome {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+  .walter-hint-box {
+    flex: 1;
+    max-width: none;
+  }
+  .jesse-beaker-slot {
+    position: relative;
+    transform: none;
+    left: auto;
+    bottom: auto;
+    margin-top: 0.25rem;
+  }
+}
+/* Ortam sahnesi */
+.scene-panel {  background: var(--bg-panel);
   border: 2px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
