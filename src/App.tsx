@@ -13,7 +13,8 @@ import {
 } from "./data/chemistry";
 import {
   addXp,
-  randomXpGain,
+import { getEnvironmentForLevel, MAX_LEVEL } from "./data/environments";
+const [gameWon, setGameWon] = useState(false);randomXpGain,
   xpRequiredForLevel,
   shouldRestoreLives,
 } from "./data/progression";
