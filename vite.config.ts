@@ -1,38 +1,18 @@
-name: Deploy to GitHub Pages
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-concurrency:
-  group: pages
-  cancel-in-progress: true
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm install
-      - run: npm run build
-        env:
-          GITHUB_PAGES: true
-          GITHUB_REPO_NAME: heisenberg-s-lab
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
+const forGitHubPages = process.env.GITHUB_PAGES === 'true'
+const repoName = process.env.GITHUB_REPO_NAME || 'heisenberg-s-lab'
+export default defineConfig({
+  base: forGitHubPages ? `/${repoName}/` : '/',
+  plugins: [react()],
+  server: {
+    host: '0.0.0.0',
+    port: 43123,
+    allowedHosts: true,
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: 43123,
+    allowedHosts: true,
+  },
+})
