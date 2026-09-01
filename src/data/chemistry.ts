@@ -55,7 +55,7 @@ export const RECIPES: Recipe[] = [
     isMetal: true,
     minLevel: 1,
   },
-  {},
+  
   {
     id: "h2o",
     formula: "H₂O",
