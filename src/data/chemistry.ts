@@ -100,17 +100,7 @@ export const RECIPES: Recipe[] = [
     isMetal: false,
     minLevel: 2,
   },
-  {
-    id: "nh3",
-    formula: "NH₃",
-    name: "Amonyak",
-    materialName: "Cam suyu",
-    elements: { N: 1, H: 3 },
-    reward: 180,
-    difficulty: 2,
-    isMetal: false,
-    minLevel: 3,
-  },
+  
   {
     id: "naoh",
     formula: "NaOH",
