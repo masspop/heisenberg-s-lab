@@ -51,3 +51,4 @@ export function minDifficultyForLevel(level: number): number {
 /** Her 5 levelde kalp yenilenir (5, 10, 15 …) */
 export function shouldRestoreLives(level: number): boolean {
   return level > 0 && level % 5 === 0;
+}
