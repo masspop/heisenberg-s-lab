@@ -14,10 +14,12 @@ export const ENVIRONMENTS: Environment[] = [
     emoji: "🌭",
     cssClass: "env-hotdog",
     description: "Los Pollos Hermanos'un yanında gizli lab",
-  },
-  {
-    id: 2,
-    name: "Bataklık",
+  },export const MAX_LEVEL = 35;
+export function getEnvironmentForLevel(level: number): Environment {
+  const index = Math.floor((level - 1) / 5) % ENVIRONMENTS.length;
+  return ENVIRONMENTS[index];
+} 
+    id: 2,name: "Bataklık",
     emoji: "🐊",
     cssClass: "env-swamp",
     description: "Tulucayır bataklığında RV lab",
