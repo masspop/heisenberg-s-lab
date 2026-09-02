@@ -408,28 +408,7 @@ export const RECIPES: Recipe[] = [
     isMetal: false,
     minLevel: 16,
   },
-  {
-    id: "hbr",
-    formula: "HBr",
-    name: "Hidrobromik Asit",
-    materialName: "Bromik asit",
-    elements: { H: 1, Br: 1 },
-    reward: 230,
-    difficulty: 2,
-    isMetal: false,
-    minLevel: 10,
-  },
-  {
-    id: "hi",
-    formula: "HI",
-    name: "Hidroiyotik Asit",
-    materialName: "İyotik asit",
-    elements: { H: 1, I: 1 },
-    reward: 260,
-    difficulty: 2,
-    isMetal: false,
-    minLevel: 11,
-  },
+  
   {
     id: "feo",
     formula: "FeO",
@@ -666,8 +645,7 @@ export function countElements(symbols: string[]): Record<string, number> {
 export function recipesMatch(
   selected: Record<string, number>,
   required: Record<string, number>
-): boolean {
-  const selKeys = Object.keys(selected);
+
   const reqKeys = Object.keys(required);
   if (selKeys.length !== reqKeys.length) return false;
   return reqKeys.every((key) => selected[key] === required[key]);
