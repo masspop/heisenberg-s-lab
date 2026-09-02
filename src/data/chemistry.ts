@@ -624,8 +624,7 @@ export const LIQUID_RECIPE_IDS = new Set([
   "c2h6o",
   "h2o2",
   "h2co3",
-  "hbr",
-  "hi",
+  ,
   "h2s",
   "koh",
 ]);
@@ -645,12 +644,12 @@ export function countElements(symbols: string[]): Record<string, number> {
 export function recipesMatch(
   selected: Record<string, number>,
   required: Record<string, number>
-
+): boolean {
+  const selKeys = Object.keys(selected);
   const reqKeys = Object.keys(required);
   if (selKeys.length !== reqKeys.length) return false;
   return reqKeys.every((key) => selected[key] === required[key]);
-}
-export function getElement(symbol: string): Element | undefined {
+}export function getElement(symbol: string): Element | undefined {
   return ELEMENTS.find((e) => e.symbol === symbol);
 }
 export function pickRecipeForLevel(
