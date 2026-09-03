@@ -1676,3 +1676,394 @@ Sonuna ekle:
   max-width: 400px;
   line-height: 1.6;
 }
+budamı bi öncekinin sonuna eklencek
+
+Evet — aynı dosyada, Part 2’nin en altına ekle.
+
+Sıra:
+
+Part 1 (baştan)
+Altına Part 2
+Altına Part 3 ← şimdi bu
+Altına Part 4 (gelecek) → sonra bir kere Commit
+devam yaz → Part 4’ü atıyorum.
+
+devam
+
+App.css — Part 4 (SON)
+Part 3’ün en altına ekle → Commit changes.
+
+/* Player badge + shop */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.player-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.35);
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem 0.25rem 0.25rem;
+  cursor: pointer;
+  color: var(--text);
+  transition: border-color 0.15s, transform 0.15s;
+}
+.player-badge:hover {
+  border-color: var(--yellow);
+  transform: translateY(-1px);
+}
+.player-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.player-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+.player-name {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+  color: var(--yellow);
+  line-height: 1.1;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.player-profile {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.shop-fab {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: 2px solid var(--border);
+  background: var(--bg-panel);
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.shop-fab:hover {
+  border-color: var(--yellow);
+}
+.footer-shop-hint {
+  margin-top: 0.35rem;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+.shop-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.shop-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.shop-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(92vw, 520px);
+  background: linear-gradient(180deg, #121812 0%, #0a0f0a 100%);
+  border-right: 2px solid var(--yellow-dim);
+  z-index: 210;
+  transform: translateX(-105%);
+  transition: transform 0.28s ease;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  overflow-y: auto;
+  box-shadow: 8px 0 32px rgba(0, 0, 0, 0.5);
+}
+.shop-panel.open {
+  transform: translateX(0);
+}
+.shop-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.shop-header h2 {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.8rem;
+  color: var(--yellow);
+  letter-spacing: 0.06em;
+}
+.shop-refresh {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 0.15rem;
+}
+.shop-money {
+  margin-left: auto;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.4rem;
+  color: var(--green);
+}
+.shop-close {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.shop-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  flex: 1;
+}
+@media (max-width: 420px) {
+  .shop-columns {
+    grid-template-columns: 1fr;
+  }
+}
+.shop-col h3 {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.25rem;
+  color: var(--yellow);
+  letter-spacing: 0.05em;
+}
+.shop-col-hint {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin: 0.15rem 0 0.5rem;
+}
+.shop-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.shop-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.45rem;
+}
+.shop-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.shop-item-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.shop-item-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.shop-item-price {
+  font-size: 0.7rem;
+  color: var(--green);
+}
+.shop-btn {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  border-radius: 6px;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.shop-btn.buy {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+.shop-btn.buy:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.shop-btn.equipped {
+  border-color: var(--green);
+  color: var(--green);
+}
+.shop-owned {
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--border);
+}
+.shop-owned h4 {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+.shop-owned-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.shop-mini {
+  border: 2px solid transparent;
+  background: transparent;
+  border-radius: 50%;
+  padding: 0;
+  cursor: pointer;
+}
+.shop-mini.on {
+  border-color: var(--yellow);
+}
+.shop-mini-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: block;
+}
+.shop-owned-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.shop-name-chip {
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  color: var(--text-dim);
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.65rem;
+  cursor: pointer;
+}
+.shop-name-chip.on {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+.shop-tip {
+  margin-top: 1rem;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.shop-packs {
+  margin-top: 1.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+.shop-packs h3 {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.25rem;
+  color: var(--yellow);
+}
+.pack-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.pack-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.pack-card h4 {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1rem;
+  color: var(--yellow);
+  letter-spacing: 0.03em;
+}
+.pack-price {
+  color: var(--green);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.pack-odds {
+  list-style: none;
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  line-height: 1.35;
+}
+.pack-open {
+  margin-top: 0.25rem;
+}
+.pack-house {
+  border-color: #8a9a8a;
+}
+.pack-more-meth {
+  border-color: #60a5fa;
+}
+.pack-los-pollos {
+  border-color: #e74c3c;
+}
+.pack-say-my-name {
+  border-color: var(--yellow);
+}
+.pack-result {
+  margin-top: 0.75rem;
+  background: rgba(0, 0, 0, 0.55);
+  border: 2px solid var(--yellow);
+  border-radius: 12px;
+  padding: 0.85rem;
+  text-align: center;
+}
+.pack-result-rarity {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.2rem;
+  color: var(--yellow);
+}
+.pack-result-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  margin: 0.4rem auto;
+  display: block;
+}
+.pack-result-label {
+  font-weight: 700;
+  margin: 0.25rem 0;
+}
+.pack-result-dup {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-bottom: 0.5rem;
+}
+@media (max-width: 640px) {
+  .header-left .logo h1 {
+    font-size: 1.35rem;
+  }
+  .player-name {
+    max-width: 100px;
+  }
+}
