@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   pickRecipeForLevel,
   getElementsForRecipe,
@@ -19,33 +19,55 @@ import {
 } from "./data/progression";
 import { getEnvironmentForLevel, MAX_LEVEL } from "./data/environments";
 import { generateWhiteHint, type WhiteHint } from "./data/hints";
+import {
+  loadGameSave,
+  saveGameSave,
+  getShopPeriod,
+  getFeaturedProfiles,
+  getFeaturedNames,
+  msUntilNextShopRefresh,
+  getNameById,
+  getProfileById,
+  dropLabel,
+  rollPack,
+  DEFAULT_PROFILE_ID,
+  DEFAULT_NAME_ID,
+  type GameSave,
+  type PackDef,
+  type PackResult,
+} from "./data/shop";
 import { WalterSprite } from "./components/WalterSprite";
 import { BiomeStage } from "./components/BiomeStage";
+import { ProfileAvatar } from "./components/ProfileAvatar";
+import { ShopPanel } from "./components/ShopPanel";
 import "./App.css";
 const MAX_LIVES = 3;
 const RECENT_RECIPE_MEMORY = 12;
-const initialRecipe = pickRecipeForLevel(1);
+const initialSave = loadGameSave();
+const initialRecipe = pickRecipeForLevel(initialSave.level);
 export default function App() {
-  const [level, setLevel] = useState(1);
-  const [xp, setXp] = useState(0);
+  const [level, setLevel] = useState(() => initialSave.level);
+  const [xp, setXp] = useState(() => initialSave.xp);
   const [currentRecipe, setCurrentRecipe] = useState<Recipe>(() => initialRecipe);
   const [elementShelf, setElementShelf] = useState(() =>
-    getElementsForRecipe(initialRecipe, 1)
+    getElementsForRecipe(initialRecipe, initialSave.level)
   );
   const [recentRecipeIds, setRecentRecipeIds] = useState<string[]>(() => [
     initialRecipe.id,
   ]);
   const [selected, setSelected] = useState<string[]>([]);
-  const [money, setMoney] = useState(0);
-  const [lives, setLives] = useState(MAX_LIVES);
-  const [compoundsDone, setCompoundsDone] = useState(0);
+  const [money, setMoney] = useState(() => initialSave.money);
+  const [lives, setLives] = useState(() => initialSave.lives);
+  const [compoundsDone, setCompoundsDone] = useState(
+    () => initialSave.compoundsDone
+  );
   const [message, setMessage] = useState<string | null>(null);
   const [messageType, setMessageType] = useState<"success" | "fail" | "info">(
     "info"
   );
   const [mixing, setMixing] = useState(false);
   const [gameOver, setGameOver] = useState(false);
-  const [gameWon, setGameWon] = useState(false);
+  const [gameWon, setGameWon] = useState(() => initialSave.gameWon);
   const [jesseShout, setJesseShout] = useState<string | null>(null);
   const [walterSideQuote, setWalterSideQuote] = useState<string | null>(null);
   const [levelUpFlash, setLevelUpFlash] = useState<number | null>(null);
@@ -53,10 +75,75 @@ export default function App() {
   const [envChangeFlash, setEnvChangeFlash] = useState<string | null>(null);
   const [hintUsedAtLevel, setHintUsedAtLevel] = useState<number | null>(null);
   const [whiteHint, setWhiteHint] = useState<WhiteHint | null>(null);
+  const [firstPlayAt] = useState(() => initialSave.firstPlayAt);
+  const [ownedProfiles, setOwnedProfiles] = useState(
+    () => initialSave.ownedProfiles
+  );
+  const [ownedNames, setOwnedNames] = useState(() => initialSave.ownedNames);
+  const [equippedProfileId, setEquippedProfileId] = useState(
+    () => initialSave.equippedProfileId
+  );
+  const [equippedNameId, setEquippedNameId] = useState(
+    () => initialSave.equippedNameId
+  );
+  const [shopOpen, setShopOpen] = useState(false);
+  const [packResult, setPackResult] = useState<PackResult | null>(null);
+  const [nowTick, setNowTick] = useState(() => Date.now());
+  const touchStartX = useRef<number | null>(null);
   const environment = useMemo(() => getEnvironmentForLevel(level), [level]);
   const xpNeeded = xpRequiredForLevel(level);
   const xpPercent = Math.min(100, (xp / xpNeeded) * 100);
   const hintAvailable = hintUsedAtLevel !== level;
+  const shopPeriod = useMemo(
+    () => getShopPeriod(firstPlayAt, nowTick),
+    [firstPlayAt, nowTick]
+  );
+  const featuredProfiles = useMemo(
+    () => getFeaturedProfiles(shopPeriod),
+    [shopPeriod]
+  );
+  const featuredNames = useMemo(
+    () => getFeaturedNames(shopPeriod),
+    [shopPeriod]
+  );
+  const refreshInMs = useMemo(
+    () => msUntilNextShopRefresh(firstPlayAt, nowTick),
+    [firstPlayAt, nowTick]
+  );
+  const displayName = getNameById(equippedNameId).label;
+  const profileMeta = getProfileById(equippedProfileId);
+  useEffect(() => {
+    const save: GameSave = {
+      firstPlayAt,
+      money,
+      ownedProfiles,
+      ownedNames,
+      equippedProfileId,
+      equippedNameId,
+      level,
+      xp,
+      lives: lives > 0 ? lives : MAX_LIVES,
+      compoundsDone,
+      gameWon,
+    };
+    saveGameSave(save);
+  }, [
+    firstPlayAt,
+    money,
+    ownedProfiles,
+    ownedNames,
+    equippedProfileId,
+    equippedNameId,
+    level,
+    xp,
+    lives,
+    compoundsDone,
+    gameWon,
+  ]);
+  useEffect(() => {
+    const id = window.setInterval(() => setNowTick(Date.now()), 30_000);
+    return () => window.clearInterval(id);
+  }, []);
   const nextRecipe = useCallback(
     (newLevel: number, lastId: string, prevRecent: string[]) => {
       const exclude = [...prevRecent, lastId].slice(-RECENT_RECIPE_MEMORY);
@@ -89,6 +176,58 @@ export default function App() {
     setMessageType("info");
     setMessage(null);
   }, [hintAvailable, currentRecipe, selected, level]);
+  const handleBuyProfile = useCallback(
+    (id: string) => {
+      const item = getProfileById(id);
+      if (ownedProfiles.includes(id) || money < item.price) return;
+      setMoney((m) => m - item.price);
+      setOwnedProfiles((prev) => [...prev, id]);
+      setEquippedProfileId(id);
+      setMessageType("success");
+      setMessage(`Profil alındı: ${item.name}`);
+    },
+    [ownedProfiles, money]
+  );
+  const handleBuyName = useCallback(
+    (id: string) => {
+      const item = getNameById(id);
+      if (ownedNames.includes(id) || money < item.price) return;
+      setMoney((m) => m - item.price);
+      setOwnedNames((prev) => [...prev, id]);
+      setEquippedNameId(id);
+      setMessageType("success");
+      setMessage(`İsim alındı: ${item.label}`);
+    },
+    [ownedNames, money]
+  );
+  const handleOpenPack = useCallback(
+    (pack: PackDef) => {
+      if (money < pack.price) return;
+      const { rarity, drop } = rollPack(pack);
+      const already =
+        drop.kind === "profile"
+          ? ownedProfiles.includes(drop.id)
+          : ownedNames.includes(drop.id);
+      setMoney((m) => m - pack.price);
+      if (!already) {
+        if (drop.kind === "profile") {
+          setOwnedProfiles((prev) => [...prev, drop.id]);
+          setEquippedProfileId(drop.id);
+        } else {
+          setOwnedNames((prev) => [...prev, drop.id]);
+          setEquippedNameId(drop.id);
+        }
+      }
+      setPackResult({
+        packId: pack.id,
+        rarity,
+        drop,
+        label: dropLabel(drop),
+        duplicate: already,
+      });
+    },
+    [money, ownedProfiles, ownedNames]
+  );
   const handleMix = useCallback(() => {
     if (!currentRecipe || selected.length === 0) return;
     setMixing(true);
@@ -159,8 +298,35 @@ export default function App() {
       setMixing(false);
     }, 800);
   }, [currentRecipe, selected, lives, xp, level, nextRecipe, recentRecipeIds]);
-  const restart = () => {
-    window.location.reload();
+const continueAfterBoom = () => {
+    setGameOver(false);
+    setLives(MAX_LIVES);
+    setSelected([]);
+    setWhiteHint(null);
+    setMessage(null);
+    nextRecipe(level, currentRecipe.id, recentRecipeIds);
+  };
+  const continueAfterWin = () => {
+    setGameWon(false);
+    setLevel(1);
+    setXp(0);
+    setLives(MAX_LIVES);
+    setSelected([]);
+    setWhiteHint(null);
+    const recipe = pickRecipeForLevel(1);
+    setCurrentRecipe(recipe);
+    setElementShelf(getElementsForRecipe(recipe, 1));
+    setRecentRecipeIds([recipe.id]);
+  };
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current == null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (dx > 70) setShopOpen(true);
+    if (dx < -70) setShopOpen(false);
   };
   const beaker = (
     <div className={`beaker ${mixing ? "mixing" : ""}`}>
@@ -193,7 +359,7 @@ export default function App() {
             <br />
             <em>&quot;Say my name.&quot;</em>
           </p>
-          <button className="btn-primary" onClick={restart}>
+          <button className="btn-primary" onClick={continueAfterWin}>
             Tekrar Oyna
           </button>
         </div>
@@ -207,15 +373,41 @@ export default function App() {
           <h1>💥 Lab Patladı!</h1>
           <p>
             Level {level} · {compoundsDone} bileşik · Kazanç: ${money}
+            <br />
+            Para, profil, isim ve level kaybolmaz.
           </p>
-          <button className="btn-primary" onClick={restart}>
-            Tekrar Oyna
+          <button className="btn-primary" onClick={continueAfterBoom}>
+            Devam Et
           </button>
         </div>
       </div>
     );
-  }return (
-    <div className={`game ${environment.cssClass}`}>
+  }
+  return (
+    <div
+      className={`game ${environment.cssClass}${shopOpen ? " shop-open" : ""}`}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      <ShopPanel
+        open={shopOpen}
+        onClose={() => setShopOpen(false)}
+        money={money}
+        featuredProfiles={featuredProfiles}
+        featuredNames={featuredNames}
+        ownedProfiles={ownedProfiles}
+        ownedNames={ownedNames}
+        equippedProfileId={equippedProfileId}
+        equippedNameId={equippedNameId}
+        refreshInMs={refreshInMs}
+        packResult={packResult}
+        onBuyProfile={handleBuyProfile}
+        onBuyName={handleBuyName}
+        onEquipProfile={setEquippedProfileId}
+        onEquipName={setEquippedNameId}
+        onOpenPack={handleOpenPack}
+        onClearPackResult={() => setPackResult(null)}
+      />
       {jesseShout && (
         <div
           className={`jesse-shout-overlay${jesseShout === JESSE_FAIL_QUOTE ? " fail" : ""}`}
@@ -245,14 +437,36 @@ export default function App() {
         </div>
       )}
       <header className="header">
-        <div className="logo">
-          <span className="logo-icon">⚗️</span>
-          <div>
-            <h1>Heisenberg&apos;s Lab</h1>
-            <span className="env-badge">{environment.name}</span>
+        <div className="header-left">
+          <button
+            type="button"
+            className="player-badge"
+            onClick={() => setShopOpen(true)}
+            title="Mağazayı aç"
+          >
+            <ProfileAvatar id={equippedProfileId} className="player-avatar" />
+            <div className="player-meta">
+              <span className="player-name">{displayName}</span>
+              <span className="player-profile">{profileMeta.name}</span>
+            </div>
+          </button>
+          <div className="logo">
+            <span className="logo-icon">⚗️</span>
+            <div>
+              <h1>Heisenberg&apos;s Lab</h1>
+              <span className="env-badge">{environment.name}</span>
+            </div>
           </div>
         </div>
         <div className="stats">
+          <button
+            type="button"
+            className="shop-fab"
+            onClick={() => setShopOpen(true)}
+            aria-label="Mağaza"
+          >
+            🛒
+          </button>
           <div className="stat stat-level">
             <span className="stat-label">Level</span>
             <span className="stat-value level-num">{level}</span>
@@ -339,6 +553,10 @@ export default function App() {
         <p>
           Level {level} · {environment.name} ·{" "}
           <em>&quot;Say my name.&quot;</em>
+        </p>
+        <p className="footer-shop-hint">
+          ← Sağa kaydır veya 🛒 · varsayılan: {DEFAULT_PROFILE_ID === equippedProfileId ? "Rookie" : displayName}
+          {equippedNameId === DEFAULT_NAME_ID ? " / Lab Rookie" : ""}
         </p>
       </footer>
     </div>
