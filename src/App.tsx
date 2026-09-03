@@ -13,9 +13,11 @@ import {
 } from "./data/chemistry";
 import {
   addXp,
-  randomXpGain,
+  calcXpGain,
   xpRequiredForLevel,
   shouldRestoreLives,
+  decadeMoneyBonus,
+  isDecadeMilestone,
 } from "./data/progression";
 import { getEnvironmentForLevel, MAX_LEVEL } from "./data/environments";
 import { generateWhiteHint, type WhiteHint } from "./data/hints";
@@ -75,6 +77,8 @@ export default function App() {
   const [envChangeFlash, setEnvChangeFlash] = useState<string | null>(null);
   const [hintUsedAtLevel, setHintUsedAtLevel] = useState<number | null>(null);
   const [whiteHint, setWhiteHint] = useState<WhiteHint | null>(null);
+  const [heartsLostOnRecipe, setHeartsLostOnRecipe] = useState(0);
+  const [heartsLostInDecade, setHeartsLostInDecade] = useState(0);
   const [firstPlayAt] = useState(() => initialSave.firstPlayAt);
   const [ownedProfiles, setOwnedProfiles] = useState(
     () => initialSave.ownedProfiles
@@ -235,13 +239,29 @@ export default function App() {
       const counts = countElements(selected);
       const correct = recipesMatch(counts, currentRecipe.elements);
       if (correct) {
-        const gainedXp = randomXpGain(level);
+        const gainedXp = calcXpGain(
+          level,
+          currentRecipe.difficulty,
+          heartsLostOnRecipe
+        );
         const xpResult = addXp(xp, level, gainedXp);
-        setMoney((m) => m + currentRecipe.reward);
-        setCompoundsDone((c) => c + 1);
+        let moneyGain = currentRecipe.reward;
+        let decadeBonus = 0;
         const finalLevel = Math.min(xpResult.level, MAX_LEVEL);
         setXp(finalLevel >= MAX_LEVEL ? 0 : xpResult.xp);
         setLevel(finalLevel);
+        if (xpResult.leveledUp) {
+          for (let lv = level + 1; lv <= finalLevel; lv++) {
+            if (isDecadeMilestone(lv)) {
+              decadeBonus += decadeMoneyBonus(heartsLostInDecade);
+              setHeartsLostInDecade(0);
+            }
+          }
+        }
+        moneyGain += decadeBonus;
+        setMoney((m) => m + moneyGain);
+        setCompoundsDone((c) => c + 1);
+        setHeartsLostOnRecipe(0);
         if (finalLevel >= MAX_LEVEL) {
           setGameWon(true);
           setMessageType("success");
@@ -275,13 +295,19 @@ export default function App() {
           }
         }
         setMessageType("success");
-        setMessage(`+${gainedXp} XP · +$${currentRecipe.reward}`);
+        setMessage(
+          decadeBonus > 0
+            ? `+${gainedXp} XP · +$${currentRecipe.reward} · 🎉 10. level +$${decadeBonus}`
+            : `+${gainedXp} XP · +$${currentRecipe.reward}`
+        );
         setSelected([]);
         setWhiteHint(null);
         nextRecipe(xpResult.level, currentRecipe.id, recentRecipeIds);
       } else {
         const newLives = lives - 1;
         setLives(newLives);
+        setHeartsLostOnRecipe((h) => h + 1);
+        setHeartsLostInDecade((h) => h + 1);
         setMessageType("fail");
         setMessage("Yanlış karışım! Lab tehlikede.");
         if (level % 2 === 1) {
@@ -297,13 +323,14 @@ export default function App() {
       }
       setMixing(false);
     }, 800);
-  }, [currentRecipe, selected, lives, xp, level, nextRecipe, recentRecipeIds]);
+  }, [currentRecipe, selected, lives, xp, level, nextRecipe, recentRecipeIds, heartsLostOnRecipe, heartsLostInDecade]);
 const continueAfterBoom = () => {
     setGameOver(false);
     setLives(MAX_LIVES);
     setSelected([]);
     setWhiteHint(null);
     setMessage(null);
+    setHeartsLostOnRecipe(0);
     nextRecipe(level, currentRecipe.id, recentRecipeIds);
   };
   const continueAfterWin = () => {
