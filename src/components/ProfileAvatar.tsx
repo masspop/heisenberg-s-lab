@@ -12,7 +12,6 @@ type AvatarId =
   | "skinny"
   | "badger"
   | "lalo";
-/** Adult caricature portraits — iconic traits, not kid cartoons */
 export function ProfileAvatar({
   id,
   className = "",
@@ -80,19 +79,22 @@ function face(id: AvatarId) {
     case "walter":
       return (
         <>
-          <ellipse cx="40" cy="34" rx="18" ry="21" fill="#efd0b0" />
-          <ellipse cx="23" cy="36" rx="3.5" ry="5.5" fill="#dfb890" />
-          <ellipse cx="57" cy="36" rx="3.5" ry="5.5" fill="#dfb890" />
-          <ellipse cx="34" cy="22" rx="7" ry="4" fill="#fff" opacity="0.12" />
-          <path d="M27 28 L37 31" stroke="#5a4030" strokeWidth="2.4" strokeLinecap="round" />
-          <path d="M53 28 L43 31" stroke="#5a4030" strokeWidth="2.4" strokeLinecap="round" />
-          <rect x="26" y="31" width="11" height="9" rx="1.5" fill="rgba(190,210,230,0.25)" stroke="#1a1a1a" strokeWidth="1.8" />
-          <rect x="43" y="31" width="11" height="9" rx="1.5" fill="rgba(190,210,230,0.25)" stroke="#1a1a1a" strokeWidth="1.8" />
-          <line x1="37" y1="35.5" x2="43" y2="35.5" stroke="#1a1a1a" strokeWidth="1.8" />
-          <ellipse cx="31.5" cy="35.5" rx="2.4" ry="2.6" fill="#1a120c" />
-          <ellipse cx="48.5" cy="35.5" rx="2.4" ry="2.6" fill="#1a120c" />
-          <path d="M38 37 Q40 42 43 40" stroke="#c49a78" strokeWidth="1.5" fill="none" />
-          <path d="M30 44 Q34 42 40 44 Q46 42 50 44 Q48 54 40 58 Q32 54 30 44" fill="#6b5344" />
+          <ellipse cx="40" cy="33" rx="17.5" ry="20.5" fill="#efd0b0" />
+          <ellipse cx="23" cy="35" rx="3.5" ry="5.5" fill="#dfb890" />
+          <ellipse cx="57" cy="35" rx="3.5" ry="5.5" fill="#dfb890" />
+          <ellipse cx="34" cy="21" rx="7" ry="4" fill="#fff" opacity="0.12" />
+          <path d="M32 22 Q40 19 48 22" stroke="#c49a78" strokeWidth="1" fill="none" opacity="0.45" />
+          <path d="M27 27 L37 30" stroke="#5a4030" strokeWidth="2.3" strokeLinecap="round" />
+          <path d="M53 27 L43 30" stroke="#5a4030" strokeWidth="2.3" strokeLinecap="round" />
+          <rect x="26" y="30" width="11" height="9" rx="1.5" fill="rgba(190,210,230,0.22)" stroke="#1a1a1a" strokeWidth="1.8" />
+          <rect x="43" y="30" width="11" height="9" rx="1.5" fill="rgba(190,210,230,0.22)" stroke="#1a1a1a" strokeWidth="1.8" />
+          <line x1="37" y1="34.5" x2="43" y2="34.5" stroke="#1a1a1a" strokeWidth="1.8" />
+          <ellipse cx="31.5" cy="34.5" rx="2.3" ry="2.5" fill="#1a120c" />
+          <ellipse cx="48.5" cy="34.5" rx="2.3" ry="2.5" fill="#1a120c" />
+          <circle cx="32.3" cy="33.5" r="0.7" fill="#fff" opacity="0.5" />
+          <circle cx="49.3" cy="33.5" r="0.7" fill="#fff" opacity="0.5" />
+          <path d="M38 36 Q40 41 43 39" stroke="#c49a78" strokeWidth="1.5" fill="none" />
+          <path d="M30 43 Q34 41 40 43 Q46 41 50 43 Q48 54 40 57 Q32 54 30 43" fill="#6b5344" />
           <rect x="24" y="54" width="32" height="18" fill="#e8e8e8" />
           <rect x="24" y="54" width="32" height="5" fill="#4a6741" />
         </>
@@ -138,7 +140,7 @@ function face(id: AvatarId) {
           <rect x="38" y="54" width="4" height="14" fill="#3d5a80" />
         </>
       );
-case "lalo":
+    case "lalo":
       return (
         <>
           <ellipse cx="40" cy="36" rx="17" ry="19" fill="#c48a58" />
@@ -181,7 +183,6 @@ case "lalo":
         </>
       );
     case "hank":
-      /* DEA — NOT bald: full ginger hair + thick mustache + badge */
       return (
         <>
           <ellipse cx="40" cy="36" rx="17" ry="18" fill="#e8b890" />
