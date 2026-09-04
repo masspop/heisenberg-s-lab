@@ -77,49 +77,56 @@ function bgLight(id: AvatarId): string {
 function face(id: AvatarId) {
   switch (id) {
     case "walter":
-      return (
-        <>
-          <ellipse cx="40" cy="33" rx="17.5" ry="20.5" fill="#efd0b0" />
-          <ellipse cx="23" cy="35" rx="3.5" ry="5.5" fill="#dfb890" />
-          <ellipse cx="57" cy="35" rx="3.5" ry="5.5" fill="#dfb890" />
-          <ellipse cx="34" cy="21" rx="7" ry="4" fill="#fff" opacity="0.12" />
-          <path d="M32 22 Q40 19 48 22" stroke="#c49a78" strokeWidth="1" fill="none" opacity="0.45" />
-          <path d="M27 27 L37 30" stroke="#5a4030" strokeWidth="2.3" strokeLinecap="round" />
-          <path d="M53 27 L43 30" stroke="#5a4030" strokeWidth="2.3" strokeLinecap="round" />
-          <rect x="26" y="30" width="11" height="9" rx="1.5" fill="rgba(190,210,230,0.22)" stroke="#1a1a1a" strokeWidth="1.8" />
-          <rect x="43" y="30" width="11" height="9" rx="1.5" fill="rgba(190,210,230,0.22)" stroke="#1a1a1a" strokeWidth="1.8" />
-          <line x1="37" y1="34.5" x2="43" y2="34.5" stroke="#1a1a1a" strokeWidth="1.8" />
-          <ellipse cx="31.5" cy="34.5" rx="2.3" ry="2.5" fill="#1a120c" />
-          <ellipse cx="48.5" cy="34.5" rx="2.3" ry="2.5" fill="#1a120c" />
-          <circle cx="32.3" cy="33.5" r="0.7" fill="#fff" opacity="0.5" />
-          <circle cx="49.3" cy="33.5" r="0.7" fill="#fff" opacity="0.5" />
-          <path d="M38 36 Q40 41 43 39" stroke="#c49a78" strokeWidth="1.5" fill="none" />
-          <path d="M30 43 Q34 41 40 43 Q46 41 50 43 Q48 54 40 57 Q32 54 30 43" fill="#6b5344" />
-          <rect x="24" y="54" width="32" height="18" fill="#e8e8e8" />
-          <rect x="24" y="54" width="32" height="5" fill="#4a6741" />
-        </>
-      );
-    case "jesse":
-      return (
-        <>
-          <ellipse cx="40" cy="36" rx="17" ry="19" fill="#e4bc8c" />
-          <path d="M21 34 Q23 12 40 10 Q57 12 59 34 Q55 22 40 20 Q25 22 21 34" fill="#24160c" />
-          <path d="M21 36 Q18 46 24 54" stroke="#24160c" strokeWidth="4" fill="none" strokeLinecap="round" />
-          <path d="M59 36 Q62 46 56 54" stroke="#24160c" strokeWidth="4" fill="none" strokeLinecap="round" />
-          <ellipse cx="23" cy="40" rx="3" ry="5" fill="#d4a878" />
-          <ellipse cx="57" cy="40" rx="3" ry="5" fill="#d4a878" />
-          <path d="M28 29 Q33 26 37 29" stroke="#24160c" strokeWidth="2" fill="none" />
-          <path d="M43 29 Q47 26 52 29" stroke="#24160c" strokeWidth="2" fill="none" />
-          <ellipse cx="33" cy="36" rx="3.2" ry="3.6" fill="#1a120c" />
-          <ellipse cx="47" cy="36" rx="3.2" ry="3.6" fill="#1a120c" />
-          <circle cx="34.2" cy="34.5" r="1" fill="#fff" opacity="0.7" />
-          <circle cx="48.2" cy="34.5" r="1" fill="#fff" opacity="0.7" />
-          <path d="M32 46 Q40 52 48 45" stroke="#8b5a3c" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-          <ellipse cx="40" cy="50" rx="8" ry="3" fill="#3d2314" opacity="0.2" />
-          <path d="M24 52 Q40 50 56 52 L54 72 Q40 76 26 72 Z" fill="#f5c518" />
-          <path d="M32 58 Q40 62 48 58" stroke="#b89010" strokeWidth="1.4" fill="none" />
-        </>
-      );
+  return (
+    <>
+      <ellipse cx="40" cy="22" rx="15" ry="10" fill="#f0dcc8" />
+      <path d="M24 30 Q26 14 40 12 Q54 14 56 30 Q54 50 40 56 Q26 50 24 30 Z" fill="#e0b890" />
+      <ellipse cx="32" cy="18" rx="6" ry="3.5" fill="#fff" opacity="0.16" />
+      <ellipse cx="22" cy="36" rx="3.5" ry="6" fill="#d4a878" />
+      <ellipse cx="58" cy="36" rx="3.5" ry="6" fill="#d4a878" />
+      <path d="M30 22 Q40 18 50 22" stroke="#b88868" strokeWidth="1.2" fill="none" opacity="0.5" />
+      <ellipse cx="31" cy="40" rx="5" ry="2.2" fill="#9a7058" opacity="0.3" />
+      <ellipse cx="49" cy="40" rx="5" ry="2.2" fill="#9a7058" opacity="0.3" />
+      <path d="M25 28 L35 31" stroke="#4a3428" strokeWidth="2.4" strokeLinecap="round" />
+      <path d="M55 28 L45 31" stroke="#4a3428" strokeWidth="2.4" strokeLinecap="round" />
+      <rect x="24" y="30" width="12" height="10" rx="1.5" fill="rgba(200,220,240,0.2)" stroke="#111" strokeWidth="2" />
+      <rect x="44" y="30" width="12" height="10" rx="1.5" fill="rgba(200,220,240,0.2)" stroke="#111" strokeWidth="2" />
+      <line x1="36" y1="35" x2="44" y2="35" stroke="#111" strokeWidth="2" />
+      <ellipse cx="30" cy="35" rx="2.5" ry="2.8" fill="#1a120c" />
+      <ellipse cx="50" cy="35" rx="2.5" ry="2.8" fill="#1a120c" />
+      <circle cx="30.8" cy="33.8" r="0.8" fill="#fff" opacity="0.55" />
+      <circle cx="50.8" cy="33.8" r="0.8" fill="#fff" opacity="0.55" />
+      <path d="M37 36 Q40 44 44 41" stroke="#b88868" strokeWidth="1.6" fill="none" />
+      <path d="M28 44 Q34 42 40 44 Q46 42 52 44 Q50 52 46 56 Q40 60 34 56 Q30 52 28 44 Z" fill="#4a3728" />
+      <path d="M30 44 Q40 48 50 44" stroke="#3d2e22" strokeWidth="2.4" fill="none" strokeLinecap="round" />
+      <rect x="24" y="56" width="32" height="16" fill="#ececec" />
+      <rect x="24" y="56" width="32" height="5" fill="#4a6741" />
+    </>
+  );
+case "jesse":
+  return (
+    <>
+      <path d="M24 34 Q26 14 40 12 Q54 14 56 34 Q54 52 40 58 Q26 52 24 34 Z" fill="#e4bc8c" />
+      <path d="M22 32 Q18 6 40 4 Q62 6 58 32 Q54 16 40 14 Q26 16 22 32 Z" fill="#1a1008" />
+      <path d="M28 12 L32 2 L36 12 Z" fill="#1a1008" />
+      <path d="M38 8 L42 -1 L48 8 Z" fill="#1a1008" />
+      <path d="M50 10 L56 1 L60 12 Z" fill="#1a1008" />
+      <path d="M22 34 Q18 46 24 54" stroke="#1a1008" strokeWidth="4.5" fill="none" strokeLinecap="round" />
+      <path d="M58 34 Q62 46 56 54" stroke="#1a1008" strokeWidth="4.5" fill="none" strokeLinecap="round" />
+      <ellipse cx="23" cy="40" rx="3.2" ry="5.5" fill="#d4a878" />
+      <ellipse cx="57" cy="40" rx="3.2" ry="5.5" fill="#d4a878" />
+      <path d="M28 28 Q33 24 38 28" stroke="#1a1008" strokeWidth="2.4" fill="none" />
+      <path d="M42 28 Q47 24 52 28" stroke="#1a1008" strokeWidth="2.4" fill="none" />
+      <ellipse cx="33" cy="36" rx="3.5" ry="4" fill="#1a120c" />
+      <ellipse cx="47" cy="36" rx="3.5" ry="4" fill="#1a120c" />
+      <circle cx="34.4" cy="34.2" r="1.2" fill="#fff" opacity="0.75" />
+      <circle cx="48.4" cy="34.2" r="1.2" fill="#fff" opacity="0.75" />
+      <path d="M32 46 Q40 56 50 44" stroke="#8b5a3c" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <ellipse cx="40" cy="52" rx="4" ry="2.5" fill="#2a1810" opacity="0.5" />
+      <path d="M24 54 Q40 52 56 54 L54 74 Q40 78 26 74 Z" fill="#f5c518" />
+      <path d="M32 60 Q40 64 48 60" stroke="#b89010" strokeWidth="1.5" fill="none" />
+    </>
+  );
     case "mike":
       return (
         <>
