@@ -332,7 +332,7 @@ const continueAfterBoom = () => {
     setMessage(null);
     setHeartsLostOnRecipe(0);
     nextRecipe(level, currentRecipe.id, recentRecipeIds);
-  };  const continueAfterWin = () => {
+  };   continueAfterWin = () => {
     setGameWon(false);
     setLevel(1);
     setXp(0);
