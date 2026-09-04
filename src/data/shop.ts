@@ -246,6 +246,28 @@ export interface GameSave {
   lives: number;
   compoundsDone: number;
   gameWon: boolean;
+  /** Stable anonymous id for leaderboard */
+  playerId: string;
+  /** 0–359 — same color for name text + avatar frame */
+  frameHue: number;
+}
+export function createPlayerId(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+  return `p-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+/** Pick a vivid random hue (avoid muddy near-gray bands). */
+export function createFrameHue(): number {
+  const vivid = [
+    8, 18, 28, 38, 48, 58, // kırmızı → turuncu → altın
+    72, 88, 102, 118, // limon → yeşil
+    138, 152, 168, 178, // yeşil → turkuaz
+    188, 198, 208, 218, // turkuaz → mavi
+    232, 248, 262, 278, // mavi → mor → eflatun
+    292, 308, 322, 338, // fuşya → gül kurusu → füme-pembe
+  ];
+  return vivid[Math.floor(Math.random() * vivid.length)]!;
 }
 function emptySave(now = Date.now()): GameSave {
   return {
@@ -260,6 +282,8 @@ function emptySave(now = Date.now()): GameSave {
     lives: MAX_LIVES,
     compoundsDone: 0,
     gameWon: false,
+    playerId: createPlayerId(),
+    frameHue: createFrameHue(),
   };
 }
 function normalizeSave(parsed: Partial<GameSave>): GameSave {
@@ -267,6 +291,11 @@ function normalizeSave(parsed: Partial<GameSave>): GameSave {
     typeof parsed.lives === "number" && parsed.lives > 0
       ? parsed.lives
       : MAX_LIVES;
+  const frameHue =
+    typeof parsed.frameHue === "number" &&
+    Number.isFinite(parsed.frameHue)
+      ? ((Math.round(parsed.frameHue) % 360) + 360) % 360
+      : createFrameHue();
   return {
     firstPlayAt: parsed.firstPlayAt ?? Date.now(),
     money: typeof parsed.money === "number" ? parsed.money : 0,
@@ -284,6 +313,11 @@ function normalizeSave(parsed: Partial<GameSave>): GameSave {
     compoundsDone:
       typeof parsed.compoundsDone === "number" ? parsed.compoundsDone : 0,
     gameWon: Boolean(parsed.gameWon),
+    playerId:
+      typeof parsed.playerId === "string" && parsed.playerId.length > 4
+        ? parsed.playerId
+        : createPlayerId(),
+    frameHue,
   };
 }
 export function loadGameSave(): GameSave {
