@@ -1352,3 +1352,201 @@ body {
     max-width: 100px;
   }
 }
+/* Pack reveal — blue meth table → fall → break → drop */
+.pack-reveal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(4, 8, 16, 0.78);
+  backdrop-filter: blur(4px);
+}
+.pack-reveal-stage {
+  width: min(420px, 100%);
+  background: linear-gradient(180deg, #121a2a 0%, #070b14 100%);
+  border: 2px solid #3b82f6;
+  border-radius: 16px;
+  padding: 1.1rem 1rem 1.25rem;
+  overflow: hidden;
+  min-height: 280px;
+  position: relative;
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.25);
+}
+.meth-table {
+  position: relative;
+  height: 200px;
+  margin: 0 auto;
+  max-width: 360px;
+}
+.meth-table-legs {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 6%;
+  height: 28px;
+  background: linear-gradient(180deg, #2a2018 0%, #0e0a08 100%);
+  clip-path: polygon(8% 0, 92% 0, 100% 100%, 0 100%);
+  opacity: 0.9;
+}
+.meth-table-surface {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: 22%;
+  height: 22px;
+  background: linear-gradient(180deg, #5a4634 0%, #2a2018 55%, #1a1410 100%);
+  border-radius: 3px;
+  box-shadow:
+    0 10px 18px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 220, 180, 0.12);
+}
+.meth-crystal {
+  width: 38px;
+  height: 46px;
+  filter: drop-shadow(0 0 6px rgba(96, 165, 250, 0.55));
+  pointer-events: none;
+}
+.meth-on-table {
+  position: absolute;
+  transform: translate(-50%, -50%) rotate(var(--meth-rot, 0deg))
+    scale(var(--meth-scale, 1));
+  animation: methGlow 1.4s ease-in-out infinite alternate;
+  transition: opacity 0.35s ease;
+}
+.meth-on-table.meth-fall {
+  animation: methFall 0.75s ease-in forwards;
+  z-index: 3;
+  filter: drop-shadow(0 0 14px rgba(147, 197, 253, 0.95));
+}
+.meth-on-table.meth-break {
+  animation: methBreak 0.55s ease-out forwards;
+  z-index: 3;
+}
+@keyframes methGlow {
+  from {
+    filter: drop-shadow(0 0 4px rgba(96, 165, 250, 0.3));
+  }
+  to {
+    filter: drop-shadow(0 0 12px rgba(147, 197, 253, 0.7));
+  }
+}
+@keyframes methFall {
+  0% {
+    transform: translate(-50%, -50%) rotate(var(--meth-rot, 0deg))
+      scale(var(--meth-scale, 1));
+  }
+  55% {
+    transform: translate(-50%, 8%) rotate(calc(var(--meth-rot, 0deg) + 50deg))
+      scale(1.2);
+  }
+  100% {
+    transform: translate(-50%, 42%) rotate(calc(var(--meth-rot, 0deg) + 110deg))
+      scale(1.05);
+  }
+}
+@keyframes methBreak {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, 42%) scale(1.05);
+  }
+  35% {
+    opacity: 0.85;
+    transform: translate(-50%, 44%) scale(1.35);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 48%) scale(0.15);
+  }
+}
+.meth-shards {
+  position: absolute;
+  left: 50%;
+  top: 78%;
+  width: 0;
+  height: 0;
+  z-index: 4;
+}
+.meth-shard {
+  position: absolute;
+  width: 11px;
+  height: 15px;
+  background: linear-gradient(135deg, #bfdbfe, #2563eb);
+  opacity: 0.9;
+  clip-path: polygon(50% 0%, 100% 40%, 70% 100%, 20% 90%, 0% 35%);
+  animation: shardFly 0.6s ease-out forwards;
+}
+.shard-0 {
+  --dx: -44px;
+  --dy: -34px;
+}
+.shard-1 {
+  --dx: 38px;
+  --dy: -28px;
+}
+.shard-2 {
+  --dx: -28px;
+  --dy: 22px;
+}
+.shard-3 {
+  --dx: 48px;
+  --dy: 18px;
+}
+.shard-4 {
+  --dx: -54px;
+  --dy: 6px;
+}
+.shard-5 {
+  --dx: 22px;
+  --dy: -44px;
+}
+.shard-6 {
+  --dx: 4px;
+  --dy: 32px;
+}
+.shard-7 {
+  --dx: -18px;
+  --dy: -20px;
+}
+@keyframes shardFly {
+  to {
+    transform: translate(var(--dx), var(--dy)) rotate(180deg) scale(0.35);
+    opacity: 0;
+  }
+}
+.pack-reveal-caption {
+  text-align: center;
+  margin: 0.65rem 0 0;
+  font-size: 0.85rem;
+  color: #93c5fd;
+  letter-spacing: 0.03em;
+}
+.pack-result-eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #60a5fa;
+}
+.pack-result-reveal {
+  animation: revealPop 0.5s ease;
+  margin-top: 0.35rem;
+  text-align: center;
+}
+.pack-result-name-big {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.7rem;
+  color: var(--yellow);
+  margin: 0.5rem 0;
+}
+@keyframes revealPop {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
