@@ -1,33 +1,3 @@
-son kez karakterleri birazdaha gerçekçi yap ama yine oyun böyle kalsın sadece tipleri birazdaha gerçekçi hallerine benzesin bide paketlerden ürün çıkma ekranında oyuncu bir paketi açtığında ilk birmasanın üstünde birsürü mavi saydam meth olsun sonra onlardan biri düşüp kırılsın içindende normalde o paketin içinden çıkacak olan ürünlerden biri çıksın 
-
-İkisini de yaptım — oyun SVG tarzı aynı kaldı.
-
-Canlı önizleme: Heisenberg's Lab
-
-Ne değişti
-Karakterler — Walter / Jesse (ve Walter profili) biraz daha gerçekçi yüz gölgesi, kırışıklık, oran; hâlâ oyun çizimi.
-Paket açılışı — Masada bir sürü saydam mavi kristal → biri düşer → kırılır → paketten çıkan ürün ekranda çıkar.
-masspop’a yapıştır (GitHub)
-Şu dosyaları tamamen değiştir:
-
-src/components/ShopPanel.tsx
-src/components/WalterSprite.tsx
-src/components/JesseSprite.tsx
-src/components/ProfileAvatar.tsx
-App.css: Dosyayı silme. İçinde /* Pack reveal satırını bul → oradan sona kadar sil → yerine yeni pack CSS’i yapıştır (yoksa dosyanın sonuna ekle).
-
-Hazır kopyalar: github-upload/pack-meth-update/ (içinde OKU.txt var).
-
-İstersen “devam” de, dosyaları parça parça buraya da yapıştırırım.
-
-sen parça parça yapıştır hangi dosyada nereyi silip bunları ekliyeceğimi filan yaz böyle yapalım
-
-Tamam — parça parça gidelim. Önce küçük dosyalar, sonra büyükler.
-
-1) WalterSprite.tsx
-Nerede: GitHub → src/components/WalterSprite.tsx
-Ne yap: Dosyanın tüm içeriğini sil, aşağıdakini tamamen yapıştır, Commit changes.
-
 export function WalterSprite({
   className = "",
   waiting = false,
@@ -169,4 +139,5 @@ export function WalterSprite({
     </svg>
   );
 }
-Bunu yapıp kaydettikten sonra “devam” yaz — sıradaki: JesseSprite.tsx.
+
+
