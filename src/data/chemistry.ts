@@ -145,17 +145,7 @@ export const RECIPES: Recipe[] = [
     isMetal: false,
     minLevel: 6,
   },
-  {
-    id: "fes",
-    formula: "FeS",
-    name: "Demir Sülfür",
-    materialName: "Manyetit",
-    elements: { Fe: 1, S: 1 },
-    reward: 250,
-    difficulty: 2,
-    isMetal: true,
-    minLevel: 6,
-  },
+  
   {
     id: "cuso4",
     formula: "CuSO₄",
