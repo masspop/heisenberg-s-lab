@@ -1,8 +1,4 @@
-5/6 — DEĞİŞTİR: src/App.tsx
-heisenberg-s-lab → src/App.tsx aç → hepsini sil → aşağıyı yapıştır → Commit.
 
-Kontrol: ilk satır import { useCallback · son satır }
-Actions yeşil olmalı.
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
