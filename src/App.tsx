@@ -297,7 +297,7 @@ export default function App() {
         setMessageType("success");
         setMessage(
           decadeBonus > 0
-            ? `+${gainedXp} XP · +$${currentRecipe.reward} · 🎉 10. level +$${decadeBonus}`
+            ? `+${gainedXp} XP · +$${currentRecipe.reward} · 🎉 +$${decadeBonus} (10. level ödülü)`
             : `+${gainedXp} XP · +$${currentRecipe.reward}`
         );
         setSelected([]);
@@ -324,15 +324,22 @@ export default function App() {
       setMixing(false);
     }, 800);
   }, [currentRecipe, selected, lives, xp, level, nextRecipe, recentRecipeIds, heartsLostOnRecipe, heartsLostInDecade]);
-const continueAfterBoom = () => {
+  const continueAfterBoom = () => {
     setGameOver(false);
+    setLevel(1);
+    setXp(0);
     setLives(MAX_LIVES);
     setSelected([]);
     setWhiteHint(null);
     setMessage(null);
     setHeartsLostOnRecipe(0);
-    nextRecipe(level, currentRecipe.id, recentRecipeIds);
-  };   continueAfterWin = () => {
+    setHeartsLostInDecade(0);
+    const recipe = pickRecipeForLevel(1);
+    setCurrentRecipe(recipe);
+    setElementShelf(getElementsForRecipe(recipe, 1));
+    setRecentRecipeIds([recipe.id]);
+  };
+  const continueAfterWin = () => {
     setGameWon(false);
     setLevel(1);
     setXp(0);
@@ -343,7 +350,8 @@ const continueAfterBoom = () => {
     setCurrentRecipe(recipe);
     setElementShelf(getElementsForRecipe(recipe, 1));
     setRecentRecipeIds([recipe.id]);
-  };  const onTouchStart = (e: React.TouchEvent) => {
+  };
+  const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
   const onTouchEnd = (e: React.TouchEvent) => {
@@ -399,7 +407,7 @@ const continueAfterBoom = () => {
           <p>
             Level {level} · {compoundsDone} bileşik · Kazanç: ${money}
             <br />
-            Level sıfırlanır.Para,profil ve isim kalır.
+            Level sıfırlanır. Para, profil ve isim kalır.
           </p>
           <button className="btn-primary" onClick={continueAfterBoom}>
             Devam Et
