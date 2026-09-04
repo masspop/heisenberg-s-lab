@@ -1,3 +1,9 @@
+5/6 — DEĞİŞTİR: src/App.tsx
+heisenberg-s-lab → src/App.tsx aç → hepsini sil → aşağıyı yapıştır → Commit.
+
+Kontrol: ilk satır import { useCallback · son satır }
+Actions yeşil olmalı.
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   pickRecipeForLevel,
@@ -38,6 +44,11 @@ import {
   type PackDef,
   type PackResult,
 } from "./data/shop";
+import {
+  submitLeaderboardScore,
+  frameCss,
+} from "./data/leaderboard";
+import { LeaderboardPanel } from "./components/LeaderboardPanel";
 import { WalterSprite } from "./components/WalterSprite";
 import { BiomeStage } from "./components/BiomeStage";
 import { ProfileAvatar } from "./components/ProfileAvatar";
@@ -91,9 +102,13 @@ export default function App() {
     () => initialSave.equippedNameId
   );
   const [shopOpen, setShopOpen] = useState(false);
+  const [leaderboardOpen, setLeaderboardOpen] = useState(false);
   const [packResult, setPackResult] = useState<PackResult | null>(null);
   const [nowTick, setNowTick] = useState(() => Date.now());
+  const [playerId] = useState(() => initialSave.playerId);
+  const [frameHue] = useState(() => initialSave.frameHue);
   const touchStartX = useRef<number | null>(null);
+  const accentColor = frameCss(frameHue);
   const environment = useMemo(() => getEnvironmentForLevel(level), [level]);
   const xpNeeded = xpRequiredForLevel(level);
   const xpPercent = Math.min(100, (xp / xpNeeded) * 100);
@@ -129,6 +144,8 @@ export default function App() {
       lives: lives > 0 ? lives : MAX_LIVES,
       compoundsDone,
       gameWon,
+      playerId,
+      frameHue,
     };
     saveGameSave(save);
   }, [
@@ -143,11 +160,44 @@ export default function App() {
     lives,
     compoundsDone,
     gameWon,
+    playerId,
+    frameHue,
   ]);
+  const pushLeaderboard = useCallback(
+    (next: {
+      money: number;
+      level: number;
+      compoundsDone: number;
+      profileId: string;
+      nameId: string;
+    }) => {
+      if (next.compoundsDone < 1) return;
+      void submitLeaderboardScore({
+        playerId,
+        frameHue,
+        displayNameId: next.nameId,
+        profileId: next.profileId,
+        money: next.money,
+        level: next.level,
+        compoundsDone: next.compoundsDone,
+      });
+    },
+    [playerId, frameHue]
+  );
   useEffect(() => {
     const id = window.setInterval(() => setNowTick(Date.now()), 30_000);
     return () => window.clearInterval(id);
   }, []);
+  useEffect(() => {
+    if (compoundsDone < 1) return;
+    pushLeaderboard({
+      money,
+      level,
+      compoundsDone,
+      profileId: equippedProfileId,
+      nameId: equippedNameId,
+    });
+  }, [equippedProfileId, equippedNameId, pushLeaderboard, compoundsDone, money, level]);
   const nextRecipe = useCallback(
     (newLevel: number, lastId: string, prevRecent: string[]) => {
       const exclude = [...prevRecent, lastId].slice(-RECENT_RECIPE_MEMORY);
@@ -260,8 +310,17 @@ export default function App() {
         }
         moneyGain += decadeBonus;
         setMoney((m) => m + moneyGain);
-        setCompoundsDone((c) => c + 1);
+        const nextCompounds = compoundsDone + 1;
+        const nextMoney = money + moneyGain;
+        setCompoundsDone(nextCompounds);
         setHeartsLostOnRecipe(0);
+        pushLeaderboard({
+          money: nextMoney,
+          level: finalLevel,
+          compoundsDone: nextCompounds,
+          profileId: equippedProfileId,
+          nameId: equippedNameId,
+        });
         if (finalLevel >= MAX_LEVEL) {
           setGameWon(true);
           setMessageType("success");
@@ -323,7 +382,22 @@ export default function App() {
       }
       setMixing(false);
     }, 800);
-  }, [currentRecipe, selected, lives, xp, level, nextRecipe, recentRecipeIds, heartsLostOnRecipe, heartsLostInDecade]);
+  }, [
+    currentRecipe,
+    selected,
+    lives,
+    xp,
+    level,
+    nextRecipe,
+    recentRecipeIds,
+    heartsLostOnRecipe,
+    heartsLostInDecade,
+    money,
+    compoundsDone,
+    equippedProfileId,
+    equippedNameId,
+    pushLeaderboard,
+  ]);
   const continueAfterBoom = () => {
     setGameOver(false);
     setLevel(1);
@@ -469,6 +543,11 @@ export default function App() {
           <p className="env-change-text">📍 Yeni Ortam: {envChangeFlash}</p>
         </div>
       )}
+      <LeaderboardPanel
+        open={leaderboardOpen}
+        onClose={() => setLeaderboardOpen(false)}
+        myPlayerId={playerId}
+      />
       <header className="header">
         <div className="header-left">
           <button
@@ -477,9 +556,16 @@ export default function App() {
             onClick={() => setShopOpen(true)}
             title="Mağazayı aç"
           >
-            <ProfileAvatar id={equippedProfileId} className="player-avatar" />
+            <span
+              className="player-avatar-frame"
+              style={{ ["--player-frame" as string]: accentColor }}
+            >
+              <ProfileAvatar id={equippedProfileId} className="player-avatar" />
+            </span>
             <div className="player-meta">
-              <span className="player-name">{displayName}</span>
+              <span className="player-name" style={{ color: accentColor }}>
+                {displayName}
+              </span>
               <span className="player-profile">{profileMeta.name}</span>
             </div>
           </button>
@@ -492,6 +578,15 @@ export default function App() {
           </div>
         </div>
         <div className="stats">
+          <button
+            type="button"
+            className="shop-fab lb-fab"
+            onClick={() => setLeaderboardOpen(true)}
+            aria-label="Leaderboard"
+            title="Leaderboard"
+          >
+            🏆
+          </button>
           <button
             type="button"
             className="shop-fab"
