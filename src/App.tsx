@@ -343,8 +343,7 @@ const continueAfterBoom = () => {
     setCurrentRecipe(recipe);
     setElementShelf(getElementsForRecipe(recipe, 1));
     setRecentRecipeIds([recipe.id]);
-  };
-  const onTouchStart = (e: React.TouchEvent) => {
+  };  const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
   const onTouchEnd = (e: React.TouchEvent) => {
