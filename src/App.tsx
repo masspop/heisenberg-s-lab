@@ -332,8 +332,7 @@ const continueAfterBoom = () => {
     setMessage(null);
     setHeartsLostOnRecipe(0);
     nextRecipe(level, currentRecipe.id, recentRecipeIds);
-  };
-  const continueAfterWin = () => {
+  };  const continueAfterWin = () => {
     setGameWon(false);
     setLevel(1);
     setXp(0);
@@ -401,7 +400,7 @@ const continueAfterBoom = () => {
           <p>
             Level {level} · {compoundsDone} bileşik · Kazanç: ${money}
             <br />
-            Para, profil, isim ve level kaybolmaz.
+            Level sıfırlanır.Para,profil ve isim kalır.
           </p>
           <button className="btn-primary" onClick={continueAfterBoom}>
             Devam Et
